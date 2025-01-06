@@ -39,6 +39,7 @@ public class Calculator extends JFrame implements ActionListener {
 
         display = new JTextField();
         display.setEditable(false);
+        display.setFont(new Font("Arial", Font.PLAIN, 24));
         add(display, BorderLayout.NORTH);
 
         panel = new JPanel();
@@ -99,10 +100,12 @@ public class Calculator extends JFrame implements ActionListener {
                 if (secondNumber != 0) {
                     firstNumber /= secondNumber;
                 } else {
+                    display.setText("Error! Dzielenie przez zero.");
                     currentInput = "";
                     return;
                 }
             }
+            default -> display.setText("Nieznany error z operatorem");
         }
         display.setText(df.format(firstNumber));
         currentInput = String.valueOf(firstNumber);
