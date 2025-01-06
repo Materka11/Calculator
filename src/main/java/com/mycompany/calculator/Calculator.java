@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 public class Calculator extends JFrame implements ActionListener {
     private final JTextField display;
@@ -22,10 +23,13 @@ public class Calculator extends JFrame implements ActionListener {
             "1", "2", "3", "-",
             "0", "=", "+", "/",
     };
+    private final DecimalFormat df = new DecimalFormat("0.00");
+    
     private String currentInput = "";
     private double firstNumber = 0;
     private String operator = "";
     private boolean isNewOperation = true;
+    
 
     public Calculator() {
         setTitle("Kalkulator");
@@ -35,14 +39,12 @@ public class Calculator extends JFrame implements ActionListener {
 
         display = new JTextField();
         display.setEditable(false);
-        display.setFont(new Font("Arial", Font.PLAIN, 24));
         add(display, BorderLayout.NORTH);
 
         panel = new JPanel();
         panel.setLayout(new GridLayout(5, 4, 10, 10));
         for (String button : buttons) {
             JButton btn = new JButton(button);
-            btn.setFont(new Font("Arial", Font.PLAIN, 24));
             btn.addActionListener(e -> actionPerformed(e));
             panel.add(btn);
         }
@@ -60,19 +62,23 @@ public class Calculator extends JFrame implements ActionListener {
             operator = "";
             isNewOperation = true;
         } else if (command.charAt(0) == '=') {
-            double secondNumber = Double.parseDouble(currentInput);
-            calculateResult(secondNumber);
-            operator = "";
-            isNewOperation = true;
-        } else if ("+-*/".contains(command)) {
-            if (!operator.isEmpty()) {
+            if (!currentInput.isEmpty() && !operator.isEmpty()) {
                 double secondNumber = Double.parseDouble(currentInput);
                 calculateResult(secondNumber);
-            } else {
-                firstNumber = Double.parseDouble(currentInput);
+                operator = "";  // Reset operator after calculation
+                isNewOperation = true;
+            }
+        } else if ("+-*/".contains(command)) {
+            if (!currentInput.isEmpty()) {
+                if (!operator.isEmpty()) {
+                    double secondNumber = Double.parseDouble(currentInput);
+                    calculateResult(secondNumber);
+                } else {
+                    firstNumber = Double.parseDouble(currentInput);
+                }
             }
             operator = command;
-            currentInput = "";
+            isNewOperation = true;
         } else {
             if (isNewOperation) {
                 currentInput = "";
@@ -83,6 +89,7 @@ public class Calculator extends JFrame implements ActionListener {
         }
     }
 
+
     private void calculateResult(double secondNumber) {
         switch (operator) {
             case "+" -> firstNumber += secondNumber;
@@ -92,13 +99,12 @@ public class Calculator extends JFrame implements ActionListener {
                 if (secondNumber != 0) {
                     firstNumber /= secondNumber;
                 } else {
-                    display.setText("Error! Dzielenie przez zero.");
+                    currentInput = "";
                     return;
                 }
             }
-            default -> display.setText("Nieznany error z operatorem");
         }
-        display.setText(String.valueOf(firstNumber));
+        display.setText(df.format(firstNumber));
         currentInput = String.valueOf(firstNumber);
     }
 
