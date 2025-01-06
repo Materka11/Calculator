@@ -43,7 +43,7 @@ public class Calculator extends JFrame implements ActionListener {
         for (String button : buttons) {
             JButton btn = new JButton(button);
             btn.setFont(new Font("Arial", Font.PLAIN, 24));
-            btn.addActionListener(this);
+            btn.addActionListener(e -> actionPerformed(e));
             panel.add(btn);
         }
         add(panel, BorderLayout.CENTER);
@@ -85,25 +85,18 @@ public class Calculator extends JFrame implements ActionListener {
 
     private void calculateResult(double secondNumber) {
         switch (operator) {
-            case "+":
-                firstNumber += secondNumber;
-                break;
-            case "-":
-                firstNumber -= secondNumber;
-                break;
-            case "*":
-                firstNumber *= secondNumber;
-                break;
-            case "/":
+            case "+" -> firstNumber += secondNumber;
+            case "-" -> firstNumber -= secondNumber;
+            case "*" -> firstNumber *= secondNumber;
+            case "/" -> {
                 if (secondNumber != 0) {
                     firstNumber /= secondNumber;
                 } else {
                     display.setText("Error! Dzielenie przez zero.");
                     return;
                 }
-                break;
-            default:
-                display.setText("Nieznany error z operatorem");
+            }
+            default -> display.setText("Nieznany error z operatorem");
         }
         display.setText(String.valueOf(firstNumber));
         currentInput = String.valueOf(firstNumber);
