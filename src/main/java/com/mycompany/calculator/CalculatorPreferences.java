@@ -12,8 +12,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CalculatorPreferences extends JPanel {
-    public CalculatorPreferences(CalculatorLogic logic) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    private final CalculatorLogic logic;
+    private final JFrame parentFrame;
+
+    public CalculatorPreferences(CalculatorLogic logic, JFrame parentFrame) {
+        this.logic = logic;
+        this.parentFrame = parentFrame;
+
+        setLayout(new FlowLayout(FlowLayout.LEFT));
         setPreferredSize(new Dimension(250, 0));
         setBorder(BorderFactory.createTitledBorder("Preferencje"));
         setVisible(false);
@@ -32,7 +38,13 @@ public class CalculatorPreferences extends JPanel {
         add(messageSelector);
 
         JButton saveButton = new JButton("Zapisz");
-        saveButton.addActionListener(e -> logic.setDivisionByZeroMessage((String) messageSelector.getSelectedItem()));
+        saveButton.addActionListener(e -> {
+            logic.setDivisionByZeroMessage((String) messageSelector.getSelectedItem());
+            setVisible(false);
+            this.parentFrame.setSize(this.parentFrame.getWidth() - getPreferredSize().width, this.parentFrame.getHeight());
+            this.parentFrame.revalidate();
+            this.parentFrame.repaint();
+        });
         add(saveButton);
     }
 }
