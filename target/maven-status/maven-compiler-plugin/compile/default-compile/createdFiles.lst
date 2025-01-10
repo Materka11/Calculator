@@ -1,1 +1,3 @@
-com\mycompany\calculator\Calculator.class
+com\mycompany\calculator\CalculatorDisplay.class
+com\mycompany\calculator\CalculatorPreferences.class
+com\mycompany\calculator\CalculatorLogic.class
