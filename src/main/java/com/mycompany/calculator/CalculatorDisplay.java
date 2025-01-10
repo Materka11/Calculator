@@ -10,7 +10,6 @@ package com.mycompany.calculator;
  */
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class CalculatorDisplay extends JFrame {
     private final JTextField display;
@@ -24,7 +23,6 @@ public class CalculatorDisplay extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Menu bar
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Preferencje");
         JMenuItem preferencesItem = new JMenuItem("Otwórz panel preferencji");
@@ -33,13 +31,11 @@ public class CalculatorDisplay extends JFrame {
         menuBar.add(menu);
         setJMenuBar(menuBar);
 
-        // Display
         display = new JTextField();
         display.setEditable(false);
         display.setFont(new Font("Arial", Font.PLAIN, 24));
         add(display, BorderLayout.NORTH);
 
-        // Main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         panel = new JPanel(new GridLayout(4, 4, 5, 5));
         logic = new CalculatorLogic(display);
@@ -53,8 +49,7 @@ public class CalculatorDisplay extends JFrame {
         }
         mainPanel.add(panel, BorderLayout.CENTER);
 
-        // Preferences panel
-        preferencesPanel = new CalculatorPreferences(logic);
+        preferencesPanel = new CalculatorPreferences(logic, this);
         mainPanel.add(preferencesPanel, BorderLayout.EAST);
 
         add(mainPanel, BorderLayout.CENTER);
