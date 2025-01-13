@@ -40,7 +40,9 @@ public class CalculatorDisplay extends JFrame {
         panel = new JPanel(new GridLayout(4, 4, 5, 5));
         logic = new CalculatorLogic(display);
 
-        String[] buttons = {"7", "8", "9", "C", "4", "5", "6", "*", "1", "2", "3", "-", "0", "=", "+", "/"};
+        String[] buttons = {
+            "7", "8", "9", "C", "4", "5", "6", "*", "1", "2", "3", "-", "0", "=", "+", "/"
+        };
         for (String button : buttons) {
             JButton btn = new JButton(button);
             btn.setPreferredSize(new Dimension(80, 80));
@@ -49,7 +51,7 @@ public class CalculatorDisplay extends JFrame {
         }
         mainPanel.add(panel, BorderLayout.CENTER);
 
-        preferencesPanel = new CalculatorPreferences(logic, this);
+        preferencesPanel = new CalculatorPreferences(logic, this, display);
         mainPanel.add(preferencesPanel, BorderLayout.EAST);
 
         add(mainPanel, BorderLayout.CENTER);
@@ -57,10 +59,18 @@ public class CalculatorDisplay extends JFrame {
 
     private void togglePreferencesPanel() {
         preferencesPanel.setVisible(!preferencesPanel.isVisible());
-        int newWidth = preferencesPanel.isVisible() ? getWidth() + preferencesPanel.getPreferredSize().width : getWidth() - preferencesPanel.getPreferredSize().width;
+        int newWidth = preferencesPanel.isVisible() ? 
+                getWidth() + preferencesPanel.getPreferredSize().width : 
+                getWidth() - preferencesPanel.getPreferredSize().width;
         setSize(newWidth, getHeight());
         revalidate();
         repaint();
+    }
+    
+    public void setDisplayFont(Font font) { 
+        display.setFont(font); 
+        display.revalidate(); 
+        display.repaint(); 
     }
 
     public static void main(String[] args) {
