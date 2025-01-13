@@ -16,6 +16,7 @@ public class CalculatorDisplay extends JFrame {
     private final JPanel panel;
     private final CalculatorLogic logic;
     private final CalculatorPreferences preferencesPanel;
+    private final JScrollPane preferencesScrollPane;
 
     public CalculatorDisplay() {
         setTitle("Kalkulator");
@@ -41,7 +42,10 @@ public class CalculatorDisplay extends JFrame {
         logic = new CalculatorLogic(display);
 
         String[] buttons = {
-            "7", "8", "9", "C", "4", "5", "6", "*", "1", "2", "3", "-", "0", "=", "+", "/"
+            "7", "8", "9", "C", "4",
+            "5", "6", "*", "1", "2",
+            "3", "-", "0", "=", "+",
+            "/"
         };
         for (String button : buttons) {
             JButton btn = new JButton(button);
@@ -52,16 +56,33 @@ public class CalculatorDisplay extends JFrame {
         mainPanel.add(panel, BorderLayout.CENTER);
 
         preferencesPanel = new CalculatorPreferences(logic, this, display);
-        mainPanel.add(preferencesPanel, BorderLayout.EAST);
+        preferencesScrollPane = new JScrollPane(preferencesPanel);
+        preferencesScrollPane
+                .setHorizontalScrollBarPolicy(
+                        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+                );
+        preferencesScrollPane
+                .setVerticalScrollBarPolicy(
+                        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+                );
+        preferencesScrollPane.setPreferredSize(new Dimension(250, 0));
+        preferencesScrollPane.setVisible(false);
+        
+        preferencesPanel.setPreferencesScrollPane(preferencesScrollPane);
 
+        mainPanel.add(preferencesScrollPane, BorderLayout.EAST);
         add(mainPanel, BorderLayout.CENTER);
     }
 
     private void togglePreferencesPanel() {
-        preferencesPanel.setVisible(!preferencesPanel.isVisible());
-        int newWidth = preferencesPanel.isVisible() ? 
-                getWidth() + preferencesPanel.getPreferredSize().width : 
-                getWidth() - preferencesPanel.getPreferredSize().width;
+        boolean isVisible = preferencesScrollPane.isVisible();
+        preferencesScrollPane.setVisible(!isVisible);
+
+        int panelWidth = preferencesScrollPane.getPreferredSize().width;
+        int newWidth = isVisible ? 
+                getWidth() - panelWidth : 
+                getWidth() + panelWidth;
+
         setSize(newWidth, getHeight());
         revalidate();
         repaint();

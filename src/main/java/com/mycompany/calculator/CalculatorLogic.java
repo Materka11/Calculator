@@ -22,6 +22,7 @@ public class CalculatorLogic implements ActionListener {
     private String operator = "";
     private boolean isNewOperation = true;
     private String divisionByZeroMessage = "Error! Dzielenie przez zero.";
+    private String unknownOperatorMessage = "Nieznany error z operatorem";
 
     public CalculatorLogic(JTextField display) {
         this.display = display;
@@ -30,7 +31,11 @@ public class CalculatorLogic implements ActionListener {
     public void setDivisionByZeroMessage(String message) {
         this.divisionByZeroMessage = message;
     }
-
+    
+    public void setUnknownOperatorMessage(String message) {
+        this.unknownOperatorMessage = message;
+    }
+ 
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -83,7 +88,7 @@ public class CalculatorLogic implements ActionListener {
                     return;
                 }
             }
-            default -> display.setText("Nieznany error z operatorem");
+            default -> display.setText(unknownOperatorMessage);
         }
         display.setText(df.format(firstNumber));
         currentInput = String.valueOf(firstNumber);

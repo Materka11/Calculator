@@ -15,9 +15,12 @@ public class CalculatorPreferences extends JPanel {
     private final CalculatorLogic logic;
     private final JFrame parentFrame;
     private final JTextField display;
+    private JScrollPane preferencesScrollPane;
     private final MessageSelectorPanel messageSelectorPanelDivisionByZero;
     private final MessageSelectorPanel messageSelectorPanelFonts;
     private final MessageSelectorPanel messageSelectorPanelSize;
+    private final MessageSelectorPanel messageSelectorPanelOperator;
+    private final MessageSelectorPanel messageSelectorPanelGrid;
 
     public CalculatorPreferences(
             CalculatorLogic logic, 
@@ -46,15 +49,26 @@ public class CalculatorPreferences extends JPanel {
                 new String[] {"24", "18"},
                 "24"
         );
+        this.messageSelectorPanelOperator = new MessageSelectorPanel(
+                "Komunikat przy nieznanym operatorze",
+                new String[] {"Nieznany error z operatorem", "Nieznany error"},
+                "Nieznany error z operatorem"
+        );
+        this.messageSelectorPanelGrid = new MessageSelectorPanel(
+                "Siatka przycisków w programie",
+                new String[] {"wierszy: 5, kolumn: 4", "wieszy 4, kolumn: 5"},
+                "wierszy: 5, kolumn: 4"
+        );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        setPreferredSize(new Dimension(250, 0));
+        setPreferredSize(new Dimension(250, 400));
         setBorder(BorderFactory.createTitledBorder("Preferencje"));
-        setVisible(false);
 
         add(this.messageSelectorPanelDivisionByZero);
         add(this.messageSelectorPanelFonts);
         add(this.messageSelectorPanelSize);
+        add(this.messageSelectorPanelOperator);
+        add(this.messageSelectorPanelGrid);
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> {
@@ -66,17 +80,38 @@ public class CalculatorPreferences extends JPanel {
             Font newFont = new Font(
                     this.messageSelectorPanelFonts.getSelectedMessage(), 
                     currentFont.getStyle(), 
-                    Integer.parseInt(this.messageSelectorPanelSize.getSelectedMessage())
+                    Integer.parseInt(
+                            this.messageSelectorPanelSize.getSelectedMessage()
+                    )
             ); 
+            this.logic.setUnknownOperatorMessage(
+                    this.messageSelectorPanelOperator.getSelectedMessage()
+            );
             this.display.setFont(newFont);
-            setVisible(false);
-            this.parentFrame.setSize(
-                    this.parentFrame.getWidth() - getPreferredSize().width,
-                    this.parentFrame.getHeight());
+            int panelWidth = this.getPreferredSize().width;
+            boolean isPreferencesVisible = this.preferencesScrollPane.isVisible();
+            this.preferencesScrollPane.setVisible(!isPreferencesVisible);
+
+            if (isPreferencesVisible) {
+                this.parentFrame.setSize(
+                    this.parentFrame.getWidth() - panelWidth,
+                    this.parentFrame.getHeight()
+                );
+            } else {
+                this.parentFrame.setSize(
+                    this.parentFrame.getWidth() + panelWidth,
+                    this.parentFrame.getHeight()
+                );
+            }
+
             this.parentFrame.revalidate();
             this.parentFrame.repaint();
         });
         add(saveButton);
+    }
+    
+    public void setPreferencesScrollPane(JScrollPane scrollPane) {
+        this.preferencesScrollPane = scrollPane;
     }
 }
 
