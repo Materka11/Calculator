@@ -21,6 +21,7 @@ public class CalculatorPreferences extends JPanel {
     private final MessageSelectorPanel messageSelectorPanelSize;
     private final MessageSelectorPanel messageSelectorPanelOperator;
     private final MessageSelectorPanel messageSelectorPanelGrid;
+    private final MessageSelectorPanel messageSelectorPanelFontsStyle;
 
     public CalculatorPreferences(
             CalculatorLogic logic, 
@@ -59,9 +60,14 @@ public class CalculatorPreferences extends JPanel {
                 new String[] {"wierszy: 4, kolumn: 4", "wierszy: 8, kolumn: 2"},
                 "wierszy: 4, kolumn: 4"
         );
+         this.messageSelectorPanelFontsStyle = new MessageSelectorPanel(
+                "Styl czcionek",
+                new String[] {"PLAIN", "BOLD"},
+                "PLAIN"
+        );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        setPreferredSize(new Dimension(250, 400));
+        setPreferredSize(new Dimension(250, 500));
         setBorder(BorderFactory.createTitledBorder("Preferencje"));
 
         add(this.messageSelectorPanelDivisionByZero);
@@ -69,6 +75,7 @@ public class CalculatorPreferences extends JPanel {
         add(this.messageSelectorPanelSize);
         add(this.messageSelectorPanelOperator);
         add(this.messageSelectorPanelGrid);
+        add(this.messageSelectorPanelFontsStyle);
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> {
@@ -77,14 +84,24 @@ public class CalculatorPreferences extends JPanel {
                             .getSelectedMessage()
             );
             
-            Font currentFont = this.display.getFont(); 
+            int fontStyle;
+            switch (this.messageSelectorPanelFontsStyle.getSelectedMessage()) {
+                case "BOLD":
+                    fontStyle = Font.BOLD;
+                    break;
+                case "ITALIC":
+                    fontStyle = Font.ITALIC;
+                    break;
+                case "PLAIN":
+                default:
+                    fontStyle = Font.PLAIN;
+                    break;
+            }
             Font newFont = new Font(
-                    this.messageSelectorPanelFonts.getSelectedMessage(), 
-                    currentFont.getStyle(), 
-                    Integer.parseInt(
-                            this.messageSelectorPanelSize.getSelectedMessage()
-                    )
-            ); 
+                this.messageSelectorPanelFonts.getSelectedMessage(),
+                fontStyle,
+                Integer.parseInt(this.messageSelectorPanelSize.getSelectedMessage())
+            );
             this.display.setFont(newFont);
             
             this.logic.setUnknownOperatorMessage(
@@ -130,7 +147,6 @@ public class CalculatorPreferences extends JPanel {
                         this, "Błąd przetwarzania siatki: " + ex.getMessage()
                 );
             }
-
 
             int panelWidth = this.getPreferredSize().width;
             boolean isPreferencesVisible = 

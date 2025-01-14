@@ -131,7 +131,9 @@ public class CalculatorDisplay extends JFrame {
         panel.revalidate();
         panel.repaint();
     }
-  
+
+
+    
     public void setDisplayFont(Font font) { 
         display.setFont(font); 
         display.revalidate(); 
