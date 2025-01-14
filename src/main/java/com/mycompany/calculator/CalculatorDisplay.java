@@ -88,6 +88,50 @@ public class CalculatorDisplay extends JFrame {
         repaint();
     }
     
+    public void updateGrid(int rows, int cols) {
+        panel.removeAll();
+        panel.setLayout(new GridLayout(rows, cols, 5, 5));
+
+        String[] buttons;
+ 
+        if (rows == 4) {
+            buttons = new String[]{
+                "7", "8", "9", "C",
+                "4", "5", "6", "*",
+                "1", "2", "3", "-", 
+                "0", "=", "+", "/"
+            };
+        } else if (rows == 8) {
+            buttons = new String[]{
+                "C", "*", 
+                "-", "+",
+                "/", "9", 
+                "8", "7", 
+                "6", "5",
+                "4", "3", 
+                "2", "1", 
+                "0", "="
+            };
+        } else {
+            buttons = new String[]{
+                "7", "8", "9", "C",
+                "4", "5", "6", "*",
+                "1", "2", "3", "-", 
+                "0", "=", "+", "/"
+            };
+        }
+
+        for (String button : buttons) {
+            JButton btn = new JButton(button);
+            btn.setPreferredSize(new Dimension(80, 80));
+            btn.addActionListener(logic);
+            panel.add(btn);
+        }
+
+        panel.revalidate();
+        panel.repaint();
+    }
+  
     public void setDisplayFont(Font font) { 
         display.setFont(font); 
         display.revalidate(); 

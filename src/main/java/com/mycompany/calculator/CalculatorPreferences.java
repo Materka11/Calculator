@@ -56,8 +56,8 @@ public class CalculatorPreferences extends JPanel {
         );
         this.messageSelectorPanelGrid = new MessageSelectorPanel(
                 "Siatka przycisków w programie",
-                new String[] {"wierszy: 5, kolumn: 4", "wieszy 4, kolumn: 5"},
-                "wierszy: 5, kolumn: 4"
+                new String[] {"wierszy: 4, kolumn: 4", "wierszy: 8, kolumn: 2"},
+                "wierszy: 4, kolumn: 4"
         );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -76,6 +76,7 @@ public class CalculatorPreferences extends JPanel {
                     this.messageSelectorPanelDivisionByZero
                             .getSelectedMessage()
             );
+            
             Font currentFont = this.display.getFont(); 
             Font newFont = new Font(
                     this.messageSelectorPanelFonts.getSelectedMessage(), 
@@ -84,12 +85,56 @@ public class CalculatorPreferences extends JPanel {
                             this.messageSelectorPanelSize.getSelectedMessage()
                     )
             ); 
+            this.display.setFont(newFont);
+            
             this.logic.setUnknownOperatorMessage(
                     this.messageSelectorPanelOperator.getSelectedMessage()
             );
-            this.display.setFont(newFont);
+            
+            try {
+                String gridSelection = 
+                        this.messageSelectorPanelGrid.getSelectedMessage();
+
+                if (
+                        !gridSelection.contains("wierszy") || 
+                        !gridSelection.contains("kolumn")
+                    ) {
+                    throw new IllegalArgumentException(
+                            "Niepoprawny format wyboru siatki: " + gridSelection
+                    );
+                }
+
+                String[] parts = gridSelection.split(",");
+                if (parts.length == 2) {
+                    String[] rowPart = parts[0].split(": ");
+                    String[] colPart = parts[1].split(": ");
+                    if (rowPart.length == 2 && colPart.length == 2) {
+                        int rows = Integer.parseInt(rowPart[1].trim());
+                        int cols = Integer.parseInt(colPart[1].trim());
+
+                        if (
+                                this.parentFrame instanceof CalculatorDisplay calculatorDisplay
+                            ) {
+                            calculatorDisplay.updateGrid(rows, cols);
+                        }
+                    } else {
+                        throw new IllegalArgumentException(
+                                "Niepoprawny format części: " + gridSelection);
+                    }
+                } else {
+                    throw new IllegalArgumentException(
+                            "Niepoprawny format gridSelection: " + gridSelection);
+                }
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(
+                        this, "Błąd przetwarzania siatki: " + ex.getMessage()
+                );
+            }
+
+
             int panelWidth = this.getPreferredSize().width;
-            boolean isPreferencesVisible = this.preferencesScrollPane.isVisible();
+            boolean isPreferencesVisible = 
+                    this.preferencesScrollPane.isVisible();
             this.preferencesScrollPane.setVisible(!isPreferencesVisible);
 
             if (isPreferencesVisible) {
