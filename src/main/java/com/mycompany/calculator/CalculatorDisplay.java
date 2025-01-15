@@ -132,7 +132,18 @@ public class CalculatorDisplay extends JFrame {
         panel.repaint();
     }
 
+    public void updateButtonColors(Color backgroundColor, Color foregroundColor) {
+        for (Component comp : panel.getComponents()) {
+            if (comp instanceof JButton) {
+                JButton button = (JButton) comp;
+                button.setBackground(backgroundColor);
+                button.setForeground(foregroundColor);
+            }
+        }
 
+        panel.revalidate();
+        panel.repaint();
+    }
     
     public void setDisplayFont(Font font) { 
         display.setFont(font); 
