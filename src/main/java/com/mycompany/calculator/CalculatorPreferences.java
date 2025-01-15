@@ -23,6 +23,7 @@ public class CalculatorPreferences extends JPanel {
     private final MessageSelectorPanel messageSelectorPanelGrid;
     private final MessageSelectorPanel messageSelectorPanelFontsStyle;
     private final MessageSelectorPanel messageSelectorPanelButtonsColor;
+    private final MessageSelectorPanel messageSelectorPanelLanguage;
 
     public CalculatorPreferences(
             CalculatorLogic logic, 
@@ -71,9 +72,14 @@ public class CalculatorPreferences extends JPanel {
                 new String[] {"Windows Color", "Czarny"}, 
                 "Windows Color"
         );
+        this.messageSelectorPanelLanguage = new MessageSelectorPanel(
+            "Język programu",
+            new String[] {"Polski", "Angielski"},
+            "Polski"
+        );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        setPreferredSize(new Dimension(250, 500));
+        setPreferredSize(new Dimension(250, 600));
         setBorder(BorderFactory.createTitledBorder("Preferencje"));
 
         add(this.messageSelectorPanelDivisionByZero);
@@ -83,6 +89,7 @@ public class CalculatorPreferences extends JPanel {
         add(this.messageSelectorPanelGrid);
         add(this.messageSelectorPanelFontsStyle);
         add(this.messageSelectorPanelButtonsColor);
+        add(this.messageSelectorPanelLanguage);
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> {
@@ -107,7 +114,8 @@ public class CalculatorPreferences extends JPanel {
             Font newFont = new Font(
                 this.messageSelectorPanelFonts.getSelectedMessage(),
                 fontStyle,
-                Integer.parseInt(this.messageSelectorPanelSize.getSelectedMessage())
+                Integer.parseInt(this.messageSelectorPanelSize
+                        .getSelectedMessage())
             );
             this.display.setFont(newFont);
             
@@ -120,11 +128,13 @@ public class CalculatorPreferences extends JPanel {
                         this.messageSelectorPanelGrid.getSelectedMessage();
 
                 if (
-                        !gridSelection.contains("wierszy") || 
-                        !gridSelection.contains("kolumn")
-                    ) {
+                    !(gridSelection.contains("wierszy") 
+                        && gridSelection.contains("kolumn")) &&
+                    !(gridSelection.contains("rows") 
+                        && gridSelection.contains("cols"))
+                ) {
                     throw new IllegalArgumentException(
-                            "Niepoprawny format wyboru siatki: " + gridSelection
+                        "Niepoprawny format wyboru siatki: " + gridSelection
                     );
                 }
 
@@ -137,7 +147,7 @@ public class CalculatorPreferences extends JPanel {
                         int cols = Integer.parseInt(colPart[1].trim());
 
                         if (
-                                this.parentFrame instanceof CalculatorDisplay calculatorDisplay
+                             this.parentFrame instanceof CalculatorDisplay calculatorDisplay
                             ) {
                             calculatorDisplay.updateGrid(rows, cols);
                         }
@@ -170,11 +180,17 @@ public class CalculatorPreferences extends JPanel {
                     foregroundColor = UIManager.getColor("Button.foreground");
                     break;
             }
-
             if (this.parentFrame instanceof CalculatorDisplay calculatorDisplay) {
-                    calculatorDisplay.updateButtonColors(backgroundColor, foregroundColor);
+                    calculatorDisplay
+                        .updateButtonColors(backgroundColor, foregroundColor);
             }
-
+            
+            String selectedLanguage = this.messageSelectorPanelLanguage
+                    .getSelectedMessage();
+            logic.setLanguage(selectedLanguage.equals("Polski") ? "pl" : "en");
+            ((CalculatorDisplay) parentFrame).refreshTexts();
+            refreshTexts(logic.getLanguage());
+            
             int panelWidth = this.getPreferredSize().width;
             boolean isPreferencesVisible = 
                     this.preferencesScrollPane.isVisible();
@@ -200,6 +216,126 @@ public class CalculatorPreferences extends JPanel {
     
     public void setPreferencesScrollPane(JScrollPane scrollPane) {
         this.preferencesScrollPane = scrollPane;
+    }
+    
+    public void refreshTexts(String language) {
+        if (language.equals("pl")) {
+            setBorder(BorderFactory.createTitledBorder("Preferencje"));
+
+            messageSelectorPanelDivisionByZero
+                    .updateLabel("Komunikat przy dzieleniu przez zero:");
+            messageSelectorPanelDivisionByZero.updateOptions(
+                new String[]{
+                    "Error! Dzielenie przez zero.",
+                    "Nie można dzielić przez zero!",
+                    "Błąd: dzielenie przez zero."
+                },
+                "Error! Dzielenie przez zero."
+            );
+
+            messageSelectorPanelFonts.updateLabel("Czcionka:");
+            messageSelectorPanelFonts.updateOptions(
+                new String[]{"Arial", "Times New Roman"},
+                "Arial"
+            );
+
+            messageSelectorPanelSize.updateLabel("Rozmiar czcionki:");
+            messageSelectorPanelSize.updateOptions(
+                new String[]{"24", "18"},
+                "24"
+            );
+
+            messageSelectorPanelOperator
+                    .updateLabel("Komunikat przy nieznanym operatorze:");
+            messageSelectorPanelOperator.updateOptions(
+                new String[]{"Nieznany error z operatorem", "Nieznany error"},
+                "Nieznany error z operatorem"
+            );
+
+            messageSelectorPanelGrid
+                    .updateLabel("Siatka przycisków w programie:");
+            messageSelectorPanelGrid.updateOptions(
+                new String[]{"wierszy: 4, kolumn: 4", "wierszy: 8, kolumn: 2"},
+                "wierszy: 4, kolumn: 4"
+            );
+
+            messageSelectorPanelFontsStyle.updateLabel("Styl czcionek:");
+            messageSelectorPanelFontsStyle.updateOptions(
+                new String[]{"PLAIN", "BOLD"},
+                "PLAIN"
+            );
+
+            messageSelectorPanelButtonsColor.updateLabel("Kolor przycisków:");
+            messageSelectorPanelButtonsColor.updateOptions(
+                new String[]{"Windows Color", "Czarny"},
+                "Windows Color"
+            );
+
+            messageSelectorPanelLanguage.updateLabel("Język programu:");
+            messageSelectorPanelLanguage.updateOptions(
+                new String[]{"Polski", "English"},
+                "Polski"
+            );
+        } else if (language.equals("en")) {
+            setBorder(BorderFactory.createTitledBorder("Preferences"));
+
+            messageSelectorPanelDivisionByZero
+                    .updateLabel("Message on division by zero:");
+            messageSelectorPanelDivisionByZero.updateOptions(
+                new String[]{
+                    "Error! Division by zero.",
+                    "Cannot divide by zero!",
+                    "Error: Division by zero."
+                },
+                "Error! Division by zero."
+            );
+
+            messageSelectorPanelFonts.updateLabel("Font:");
+            messageSelectorPanelFonts.updateOptions(
+                new String[]{"Arial", "Times New Roman"},
+                "Arial"
+            );
+
+            messageSelectorPanelSize.updateLabel("Font size:");
+            messageSelectorPanelSize.updateOptions(
+                new String[]{"24", "18"},
+                "24"
+            );
+
+            messageSelectorPanelOperator
+                    .updateLabel("Message on unknown operator:");
+            messageSelectorPanelOperator.updateOptions(
+                new String[]{"Unknown operator error", "Unknown error"},
+                "Unknown operator error"
+            );
+
+            messageSelectorPanelGrid.updateLabel("Button grid layout:");
+            messageSelectorPanelGrid.updateOptions(
+                new String[]{"rows: 4, cols: 4", "rows: 8, cols: 2"},
+                "rows: 4, cols: 4"
+            );
+
+            messageSelectorPanelFontsStyle.updateLabel("Font style:");
+            messageSelectorPanelFontsStyle.updateOptions(
+                new String[]{"PLAIN", "BOLD"},
+                "PLAIN"
+            );
+
+            messageSelectorPanelButtonsColor.updateLabel("Button color:");
+            messageSelectorPanelButtonsColor.updateOptions(
+                new String[]{"Windows Color", "Black"},
+                "Windows Color"
+            );
+
+            messageSelectorPanelLanguage.updateLabel("Program language:");
+            messageSelectorPanelLanguage.updateOptions(
+                new String[]{"Polski", "English"},
+                "English"
+            );
+        }
+
+        revalidate();
+        repaint();
     }
 }
 
