@@ -17,6 +17,9 @@ public class CalculatorDisplay extends JFrame {
     private final CalculatorLogic logic;
     private final CalculatorPreferences preferencesPanel;
     private final JScrollPane preferencesScrollPane;
+    private final JMenuBar menuBar;
+    private final JMenu menu;
+    private final JMenuItem preferencesItem;
 
     public CalculatorDisplay() {
         setTitle("Kalkulator");
@@ -24,9 +27,9 @@ public class CalculatorDisplay extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Preferencje");
-        JMenuItem preferencesItem = new JMenuItem("Otwórz panel preferencji");
+        menuBar = new JMenuBar();
+        menu = new JMenu("Preferencje");
+        preferencesItem = new JMenuItem("Otwórz panel preferencji");
         preferencesItem.addActionListener(e -> togglePreferencesPanel());
         menu.add(preferencesItem);
         menuBar.add(menu);
@@ -134,8 +137,7 @@ public class CalculatorDisplay extends JFrame {
 
     public void updateButtonColors(Color backgroundColor, Color foregroundColor) {
         for (Component comp : panel.getComponents()) {
-            if (comp instanceof JButton) {
-                JButton button = (JButton) comp;
+            if (comp instanceof JButton button) {
                 button.setBackground(backgroundColor);
                 button.setForeground(foregroundColor);
             }
@@ -149,6 +151,20 @@ public class CalculatorDisplay extends JFrame {
         display.setFont(font); 
         display.revalidate(); 
         display.repaint(); 
+    }
+    
+    public void refreshTexts() {
+        if (logic.getLanguage().equals("pl")) {
+            setTitle("Kalkulator");
+            menu.setText("Preferencje");
+            preferencesItem.setText("Otwórz panel preferencji");
+        } else if (logic.getLanguage().equals("en")) {
+            setTitle("Calculator");
+            menu.setText("Preferences");
+            preferencesItem.setText("Open preferences panel");
+        }
+        revalidate();
+        repaint();
     }
 
     public static void main(String[] args) {

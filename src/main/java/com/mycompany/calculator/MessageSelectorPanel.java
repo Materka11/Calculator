@@ -37,5 +37,21 @@ public class MessageSelectorPanel extends JPanel {
     public String getSelectedMessage() {
         return (String) messageSelector.getSelectedItem();
     }
+    
+    public void updateLabel(String newLabel) {
+        this.selectLabel.setText(newLabel);
+        revalidate();
+        repaint();
+    }
+    
+    public void updateOptions(String[] newMessages, String selectedItem) {
+        messageSelector.removeAllItems();
+        for (String message : newMessages) {
+            messageSelector.addItem(message);
+        }
+        messageSelector.setSelectedItem(selectedItem);
+        revalidate();
+        repaint();
+    }
 }
 
