@@ -22,6 +22,7 @@ public class CalculatorPreferences extends JPanel {
     private final MessageSelectorPanel messageSelectorPanelOperator;
     private final MessageSelectorPanel messageSelectorPanelGrid;
     private final MessageSelectorPanel messageSelectorPanelFontsStyle;
+    private final MessageSelectorPanel messageSelectorPanelButtonsColor;
 
     public CalculatorPreferences(
             CalculatorLogic logic, 
@@ -65,6 +66,11 @@ public class CalculatorPreferences extends JPanel {
                 new String[] {"PLAIN", "BOLD"},
                 "PLAIN"
         );
+        this.messageSelectorPanelButtonsColor = new MessageSelectorPanel(
+                "Kolor przycisków", 
+                new String[] {"Windows Color", "Czarny"}, 
+                "Windows Color"
+        );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
         setPreferredSize(new Dimension(250, 500));
@@ -76,6 +82,7 @@ public class CalculatorPreferences extends JPanel {
         add(this.messageSelectorPanelOperator);
         add(this.messageSelectorPanelGrid);
         add(this.messageSelectorPanelFontsStyle);
+        add(this.messageSelectorPanelButtonsColor);
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> {
@@ -146,6 +153,26 @@ public class CalculatorPreferences extends JPanel {
                 JOptionPane.showMessageDialog(
                         this, "Błąd przetwarzania siatki: " + ex.getMessage()
                 );
+            }
+            
+            String selectedColor = this.messageSelectorPanelButtonsColor
+                    .getSelectedMessage();
+            Color backgroundColor;
+            Color foregroundColor = Color.WHITE;
+
+            switch (selectedColor) {
+                case "Czarny":
+                    backgroundColor = Color.BLACK;
+                    break;
+                case "Windows Color":
+                default:
+                    backgroundColor = UIManager.getColor("Button.background");
+                    foregroundColor = UIManager.getColor("Button.foreground");
+                    break;
+            }
+
+            if (this.parentFrame instanceof CalculatorDisplay calculatorDisplay) {
+                    calculatorDisplay.updateButtonColors(backgroundColor, foregroundColor);
             }
 
             int panelWidth = this.getPreferredSize().width;
