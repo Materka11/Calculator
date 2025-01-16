@@ -54,6 +54,10 @@ public class CalculatorLogic implements ActionListener {
     public String getFullscreenMessage() {
         return fullscreenMessage;
     }
+    
+    public void setDecimalFormat(String pattern) {
+        this.df.applyPattern(pattern);
+    }
  
     @Override
     public void actionPerformed(ActionEvent e) {

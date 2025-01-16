@@ -25,6 +25,7 @@ public class CalculatorPreferences extends JPanel {
     private final MessageSelectorPanel messageSelectorPanelButtonsColor;
     private final MessageSelectorPanel messageSelectorPanelLanguage;
     private final MessageSelectorPanel messageSelectorPanelFullscreen;
+    private final MessageSelectorPanel messageSelectorPanelDecimalFormat;
 
     public CalculatorPreferences(
             CalculatorLogic logic, 
@@ -88,9 +89,18 @@ public class CalculatorPreferences extends JPanel {
             },
             "Tryb pełnoekranowy włączony."
         );
+        
+         this.messageSelectorPanelDecimalFormat = new MessageSelectorPanel(
+            "Liczba miejsc po przecinku", 
+            new String[]{
+                "2",
+                "3"
+            },
+            "2"
+        );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        setPreferredSize(new Dimension(250, 600));
+        setPreferredSize(new Dimension(250, 700));
         setBorder(BorderFactory.createTitledBorder("Preferencje"));
 
         add(this.messageSelectorPanelDivisionByZero);
@@ -102,6 +112,7 @@ public class CalculatorPreferences extends JPanel {
         add(this.messageSelectorPanelButtonsColor);
         add(this.messageSelectorPanelLanguage);
         add(this.messageSelectorPanelFullscreen);
+        add(this.messageSelectorPanelDecimalFormat);
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> {
@@ -199,13 +210,23 @@ public class CalculatorPreferences extends JPanel {
             
             String selectedLanguage = this.messageSelectorPanelLanguage
                     .getSelectedMessage();
-            logic.setLanguage(selectedLanguage.equals("Polski") ? "pl" : "en");
+            this.logic.setLanguage(selectedLanguage.equals("Polski") ? "pl" : "en");
             ((CalculatorDisplay) parentFrame).refreshTexts();
-            refreshTexts(logic.getLanguage());
+            refreshTexts(this.logic.getLanguage());
             
             this.logic.setFullscreenMessage(
                 this.messageSelectorPanelFullscreen.getSelectedMessage()
             );
+            
+            String selectedDecimalPlaces = messageSelectorPanelDecimalFormat
+                    .getSelectedMessage();
+            System.out.println(selectedDecimalPlaces);
+            String decimalPattern = "0.";
+            for (int i = 0; i < Integer.parseInt(selectedDecimalPlaces); i++) {
+                decimalPattern += "0";
+            }
+            System.out.println(decimalPattern);
+            this.logic.setDecimalFormat(decimalPattern);
             
             int panelWidth = this.getPreferredSize().width;
             boolean isPreferencesVisible = 
@@ -292,6 +313,22 @@ public class CalculatorPreferences extends JPanel {
                 new String[]{"Polski", "English"},
                 "Polski"
             );
+            
+            messageSelectorPanelFullscreen.updateLabel("Komunikat o trybie pełnoekranowym:");
+            messageSelectorPanelFullscreen.updateOptions(
+                new String[]{
+                "Tryb pełnoekranowy włączony.",
+                "Pełny ekran aktywowany!",
+                "Tryb pełnoekranowy został uruchomiony."
+                },
+                "Tryb pełnoekranowy włączony."
+            );
+            
+            messageSelectorPanelDecimalFormat.updateLabel("Liczba miejsc po przecinku:");
+            messageSelectorPanelDecimalFormat.updateOptions(
+                new String[]{"2", "3"},
+                "2"
+            );
         } else if (language.equals("en")) {
             setBorder(BorderFactory.createTitledBorder("Preferences"));
 
@@ -347,6 +384,22 @@ public class CalculatorPreferences extends JPanel {
             messageSelectorPanelLanguage.updateOptions(
                 new String[]{"Polski", "English"},
                 "English"
+            );
+            
+            messageSelectorPanelFullscreen.updateLabel("Fullscreen mode message:");
+            messageSelectorPanelFullscreen.updateOptions(
+                new String[]{
+                "Fullscreen mode enabled.",
+                "Full screen activated!",
+                "Fullscreen mode has been started."
+                },
+                "Fullscreen mode enabled."
+            );
+            
+            messageSelectorPanelDecimalFormat.updateLabel("Number of decimal places:");
+            messageSelectorPanelDecimalFormat.updateOptions(
+                new String[]{"2", "3"},
+                "2"
             );
         }
 
