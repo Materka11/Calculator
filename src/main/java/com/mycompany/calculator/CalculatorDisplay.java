@@ -26,6 +26,12 @@ public class CalculatorDisplay extends JFrame {
         setSize(350, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        
+        addWindowStateListener(e -> {
+            if ((e.getNewState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
+                showFullscreenMessage();
+            }
+        });
 
         menuBar = new JMenuBar();
         menu = new JMenu("Preferencje");
@@ -134,6 +140,10 @@ public class CalculatorDisplay extends JFrame {
         panel.revalidate();
         panel.repaint();
     }
+    
+     private void showFullscreenMessage() {
+        JOptionPane.showMessageDialog(this, logic.getFullscreenMessage());
+    }
 
     public void updateButtonColors(Color backgroundColor, Color foregroundColor) {
         for (Component comp : panel.getComponents()) {
@@ -165,6 +175,13 @@ public class CalculatorDisplay extends JFrame {
         }
         revalidate();
         repaint();
+    }
+    
+    public void enableFullscreenMode() {
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        JOptionPane.showMessageDialog(
+            this, logic.getFullscreenMessage()
+        );
     }
 
     public static void main(String[] args) {

@@ -24,6 +24,7 @@ public class CalculatorPreferences extends JPanel {
     private final MessageSelectorPanel messageSelectorPanelFontsStyle;
     private final MessageSelectorPanel messageSelectorPanelButtonsColor;
     private final MessageSelectorPanel messageSelectorPanelLanguage;
+    private final MessageSelectorPanel messageSelectorPanelFullscreen;
 
     public CalculatorPreferences(
             CalculatorLogic logic, 
@@ -77,6 +78,16 @@ public class CalculatorPreferences extends JPanel {
             new String[] {"Polski", "Angielski"},
             "Polski"
         );
+        
+        this.messageSelectorPanelFullscreen = new MessageSelectorPanel(
+            "Komunikat o trybie pełnoekranowym:", 
+            new String[]{
+                "Tryb pełnoekranowy włączony.",
+                "Pełny ekran aktywowany!",
+                "Tryb pełnoekranowy został uruchomiony."
+            },
+            "Tryb pełnoekranowy włączony."
+        );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
         setPreferredSize(new Dimension(250, 600));
@@ -90,6 +101,7 @@ public class CalculatorPreferences extends JPanel {
         add(this.messageSelectorPanelFontsStyle);
         add(this.messageSelectorPanelButtonsColor);
         add(this.messageSelectorPanelLanguage);
+        add(this.messageSelectorPanelFullscreen);
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> {
@@ -190,6 +202,10 @@ public class CalculatorPreferences extends JPanel {
             logic.setLanguage(selectedLanguage.equals("Polski") ? "pl" : "en");
             ((CalculatorDisplay) parentFrame).refreshTexts();
             refreshTexts(logic.getLanguage());
+            
+            this.logic.setFullscreenMessage(
+                this.messageSelectorPanelFullscreen.getSelectedMessage()
+            );
             
             int panelWidth = this.getPreferredSize().width;
             boolean isPreferencesVisible = 
