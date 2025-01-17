@@ -23,7 +23,6 @@ public class CalculatorPreferences extends JPanel {
     private final MessageSelectorPanel messageSelectorPanelGrid;
     private final MessageSelectorPanel messageSelectorPanelFontsStyle;
     private final MessageSelectorPanel messageSelectorPanelButtonsColor;
-    private final MessageSelectorPanel messageSelectorPanelLanguage;
     private final MessageSelectorPanel messageSelectorPanelFullscreen;
     private final MessageSelectorPanel messageSelectorPanelDecimalFormat;
 
@@ -74,12 +73,7 @@ public class CalculatorPreferences extends JPanel {
                 new String[] {"Windows Color", "Czarny"}, 
                 "Windows Color"
         );
-        this.messageSelectorPanelLanguage = new MessageSelectorPanel(
-            "Język programu",
-            new String[] {"Polski", "Angielski"},
-            "Polski"
-        );
-        
+       
         this.messageSelectorPanelFullscreen = new MessageSelectorPanel(
             "Komunikat o trybie pełnoekranowym:", 
             new String[]{
@@ -90,13 +84,10 @@ public class CalculatorPreferences extends JPanel {
             "Tryb pełnoekranowy włączony."
         );
         
-         this.messageSelectorPanelDecimalFormat = new MessageSelectorPanel(
-            "Liczba miejsc po przecinku", 
-            new String[]{
-                "2",
-                "3"
-            },
-            "2"
+        this.messageSelectorPanelDecimalFormat = new MessageSelectorPanel(
+                "Liczba miejsc po przecinku:", 
+                new String[] {"2", "3", "4"}, 
+                "2"
         );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -110,12 +101,13 @@ public class CalculatorPreferences extends JPanel {
         add(this.messageSelectorPanelGrid);
         add(this.messageSelectorPanelFontsStyle);
         add(this.messageSelectorPanelButtonsColor);
-        add(this.messageSelectorPanelLanguage);
         add(this.messageSelectorPanelFullscreen);
         add(this.messageSelectorPanelDecimalFormat);
+       
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> {
+            System.out.println(this.messageSelectorPanelDecimalFormat.getSelectedMessage());
             this.logic.setDivisionByZeroMessage(
                     this.messageSelectorPanelDivisionByZero
                             .getSelectedMessage()
@@ -208,25 +200,29 @@ public class CalculatorPreferences extends JPanel {
                         .updateButtonColors(backgroundColor, foregroundColor);
             }
             
-            String selectedLanguage = this.messageSelectorPanelLanguage
-                    .getSelectedMessage();
-            this.logic.setLanguage(selectedLanguage.equals("Polski") ? "pl" : "en");
-            ((CalculatorDisplay) parentFrame).refreshTexts();
-            refreshTexts(this.logic.getLanguage());
-            
             this.logic.setFullscreenMessage(
                 this.messageSelectorPanelFullscreen.getSelectedMessage()
             );
             
-            String selectedDecimalPlaces = messageSelectorPanelDecimalFormat
-                    .getSelectedMessage();
-            System.out.println(selectedDecimalPlaces);
-            String decimalPattern = "0.";
-            for (int i = 0; i < Integer.parseInt(selectedDecimalPlaces); i++) {
-                decimalPattern += "0";
+            String selectedValue = messageSelectorPanelDecimalFormat.getSelectedMessage();
+
+            if (selectedValue == null) {
+                System.err.println("Wybrano wartość null, ignoruję.");
+                return;
             }
-            System.out.println(decimalPattern);
-            this.logic.setDecimalFormat(decimalPattern);
+
+            try {
+                int decimalPlaces = Integer.parseInt(selectedValue);
+                StringBuilder pattern = new StringBuilder("0.");
+                for (int i = 0; i < decimalPlaces; i++) {
+                    pattern.append("0");
+                }
+
+                logic.setDecimalFormat(pattern.toString());
+                System.out.println("Zaktualizowano format na: " + pattern);
+            } catch (NumberFormatException ex) {
+                System.err.println("Nieprawidłowa wartość: " + selectedValue);
+            }
             
             int panelWidth = this.getPreferredSize().width;
             boolean isPreferencesVisible = 
@@ -253,158 +249,6 @@ public class CalculatorPreferences extends JPanel {
     
     public void setPreferencesScrollPane(JScrollPane scrollPane) {
         this.preferencesScrollPane = scrollPane;
-    }
-    
-    public void refreshTexts(String language) {
-        if (language.equals("pl")) {
-            setBorder(BorderFactory.createTitledBorder("Preferencje"));
-
-            messageSelectorPanelDivisionByZero
-                    .updateLabel("Komunikat przy dzieleniu przez zero:");
-            messageSelectorPanelDivisionByZero.updateOptions(
-                new String[]{
-                    "Error! Dzielenie przez zero.",
-                    "Nie można dzielić przez zero!",
-                    "Błąd: dzielenie przez zero."
-                },
-                "Error! Dzielenie przez zero."
-            );
-
-            messageSelectorPanelFonts.updateLabel("Czcionka:");
-            messageSelectorPanelFonts.updateOptions(
-                new String[]{"Arial", "Times New Roman"},
-                "Arial"
-            );
-
-            messageSelectorPanelSize.updateLabel("Rozmiar czcionki:");
-            messageSelectorPanelSize.updateOptions(
-                new String[]{"24", "18"},
-                "24"
-            );
-
-            messageSelectorPanelOperator
-                    .updateLabel("Komunikat przy nieznanym operatorze:");
-            messageSelectorPanelOperator.updateOptions(
-                new String[]{"Nieznany error z operatorem", "Nieznany error"},
-                "Nieznany error z operatorem"
-            );
-
-            messageSelectorPanelGrid
-                    .updateLabel("Siatka przycisków w programie:");
-            messageSelectorPanelGrid.updateOptions(
-                new String[]{"wierszy: 4, kolumn: 4", "wierszy: 8, kolumn: 2"},
-                "wierszy: 4, kolumn: 4"
-            );
-
-            messageSelectorPanelFontsStyle.updateLabel("Styl czcionek:");
-            messageSelectorPanelFontsStyle.updateOptions(
-                new String[]{"PLAIN", "BOLD"},
-                "PLAIN"
-            );
-
-            messageSelectorPanelButtonsColor.updateLabel("Kolor przycisków:");
-            messageSelectorPanelButtonsColor.updateOptions(
-                new String[]{"Windows Color", "Czarny"},
-                "Windows Color"
-            );
-
-            messageSelectorPanelLanguage.updateLabel("Język programu:");
-            messageSelectorPanelLanguage.updateOptions(
-                new String[]{"Polski", "English"},
-                "Polski"
-            );
-            
-            messageSelectorPanelFullscreen.updateLabel("Komunikat o trybie pełnoekranowym:");
-            messageSelectorPanelFullscreen.updateOptions(
-                new String[]{
-                "Tryb pełnoekranowy włączony.",
-                "Pełny ekran aktywowany!",
-                "Tryb pełnoekranowy został uruchomiony."
-                },
-                "Tryb pełnoekranowy włączony."
-            );
-            
-            messageSelectorPanelDecimalFormat.updateLabel("Liczba miejsc po przecinku:");
-            messageSelectorPanelDecimalFormat.updateOptions(
-                new String[]{"2", "3"},
-                "2"
-            );
-        } else if (language.equals("en")) {
-            setBorder(BorderFactory.createTitledBorder("Preferences"));
-
-            messageSelectorPanelDivisionByZero
-                    .updateLabel("Message on division by zero:");
-            messageSelectorPanelDivisionByZero.updateOptions(
-                new String[]{
-                    "Error! Division by zero.",
-                    "Cannot divide by zero!",
-                    "Error: Division by zero."
-                },
-                "Error! Division by zero."
-            );
-
-            messageSelectorPanelFonts.updateLabel("Font:");
-            messageSelectorPanelFonts.updateOptions(
-                new String[]{"Arial", "Times New Roman"},
-                "Arial"
-            );
-
-            messageSelectorPanelSize.updateLabel("Font size:");
-            messageSelectorPanelSize.updateOptions(
-                new String[]{"24", "18"},
-                "24"
-            );
-
-            messageSelectorPanelOperator
-                    .updateLabel("Message on unknown operator:");
-            messageSelectorPanelOperator.updateOptions(
-                new String[]{"Unknown operator error", "Unknown error"},
-                "Unknown operator error"
-            );
-
-            messageSelectorPanelGrid.updateLabel("Button grid layout:");
-            messageSelectorPanelGrid.updateOptions(
-                new String[]{"rows: 4, cols: 4", "rows: 8, cols: 2"},
-                "rows: 4, cols: 4"
-            );
-
-            messageSelectorPanelFontsStyle.updateLabel("Font style:");
-            messageSelectorPanelFontsStyle.updateOptions(
-                new String[]{"PLAIN", "BOLD"},
-                "PLAIN"
-            );
-
-            messageSelectorPanelButtonsColor.updateLabel("Button color:");
-            messageSelectorPanelButtonsColor.updateOptions(
-                new String[]{"Windows Color", "Black"},
-                "Windows Color"
-            );
-
-            messageSelectorPanelLanguage.updateLabel("Program language:");
-            messageSelectorPanelLanguage.updateOptions(
-                new String[]{"Polski", "English"},
-                "English"
-            );
-            
-            messageSelectorPanelFullscreen.updateLabel("Fullscreen mode message:");
-            messageSelectorPanelFullscreen.updateOptions(
-                new String[]{
-                "Fullscreen mode enabled.",
-                "Full screen activated!",
-                "Fullscreen mode has been started."
-                },
-                "Fullscreen mode enabled."
-            );
-            
-            messageSelectorPanelDecimalFormat.updateLabel("Number of decimal places:");
-            messageSelectorPanelDecimalFormat.updateOptions(
-                new String[]{"2", "3"},
-                "2"
-            );
-        }
-
-        revalidate();
-        repaint();
     }
 }
 

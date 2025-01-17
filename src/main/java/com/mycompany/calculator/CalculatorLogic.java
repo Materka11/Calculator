@@ -23,7 +23,6 @@ public class CalculatorLogic implements ActionListener {
     private boolean isNewOperation = true;
     private String divisionByZeroMessage = "Error! Dzielenie przez zero.";
     private String unknownOperatorMessage = "Nieznany error z operatorem";
-    private String language = "pl";
     private String fullscreenMessage = "Tryb pełnoekranowy włączony.";
 
     public CalculatorLogic(JTextField display) {
@@ -36,15 +35,6 @@ public class CalculatorLogic implements ActionListener {
     
     public void setUnknownOperatorMessage(String message) {
         this.unknownOperatorMessage = message;
-    }
-    
-    public void setLanguage(String language) {
-        this.language = language;
-        updateTexts();
-    }
-    
-    public String getLanguage() {
-        return this.language;
     }
     
     public void setFullscreenMessage(String message) {
@@ -115,16 +105,6 @@ public class CalculatorLogic implements ActionListener {
         }
         display.setText(df.format(firstNumber));
         currentInput = String.valueOf(firstNumber);
-    }
-    
-    private void updateTexts() {
-        if (language.equals("pl")) {
-            divisionByZeroMessage = "Error! Dzielenie przez zero.";
-            unknownOperatorMessage = "Nieznany error z operatorem";
-        } else if (language.equals("en")) {
-            divisionByZeroMessage = "Error! Division by zero.";
-            unknownOperatorMessage = "Unknown operator error.";
-        }
     }
 }
 
