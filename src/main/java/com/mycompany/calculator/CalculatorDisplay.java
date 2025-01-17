@@ -163,20 +163,6 @@ public class CalculatorDisplay extends JFrame {
         display.repaint(); 
     }
     
-    public void refreshTexts() {
-        if (logic.getLanguage().equals("pl")) {
-            setTitle("Kalkulator");
-            menu.setText("Preferencje");
-            preferencesItem.setText("Otwórz panel preferencji");
-        } else if (logic.getLanguage().equals("en")) {
-            setTitle("Calculator");
-            menu.setText("Preferences");
-            preferencesItem.setText("Open preferences panel");
-        }
-        revalidate();
-        repaint();
-    }
-    
     public void enableFullscreenMode() {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         JOptionPane.showMessageDialog(
