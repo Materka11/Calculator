@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.calculator;
 
-/**
- *
- * @author salaA_11
- */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,27 +16,31 @@ public class Calculator extends JFrame implements ActionListener {
             "0", "=", "+", "/",
     };
     private final DecimalFormat df = new DecimalFormat("0.00");
-    
+
     private String currentInput = "";
     private double firstNumber = 0;
     private String operator = "";
     private boolean isNewOperation = true;
-    
 
     public Calculator() {
         setTitle("Kalkulator");
-        setSize(400, 500);
+        // Zmieniamy rozmiar okna na taki sam jak CalculatorDisplay
+        setSize(350, 400);  // Ustawienie rozmiaru okna
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         display = new JTextField();
         display.setEditable(false);
+        display.setFont(new Font("Arial", Font.PLAIN, 24));
         add(display, BorderLayout.NORTH);
 
         panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 4, 10, 10));
+        panel.setLayout(new GridLayout(4, 4, 5, 5)); // Ustawienie siatki przycisków
+
+        // Ustawiamy rozmiar przycisków na taki sam jak w CalculatorDisplay
         for (String button : buttons) {
             JButton btn = new JButton(button);
+            btn.setPreferredSize(new Dimension(80, 80));  // Ustawienie rozmiaru przycisku
             btn.addActionListener(e -> actionPerformed(e));
             panel.add(btn);
         }
@@ -89,7 +85,6 @@ public class Calculator extends JFrame implements ActionListener {
         }
     }
 
-
     private void calculateResult(double secondNumber) {
         switch (operator) {
             case "+" -> firstNumber += secondNumber;
@@ -111,7 +106,7 @@ public class Calculator extends JFrame implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Calculator calculator = new Calculator();
-            calculator.setVisible(true); 
+            calculator.setVisible(true);
         });
     }
 }

@@ -25,6 +25,7 @@ public class CalculatorPreferences extends JPanel {
     private final MessageSelectorPanel messageSelectorPanelButtonsColor;
     private final MessageSelectorPanel messageSelectorPanelFullscreen;
     private final MessageSelectorPanel messageSelectorPanelDecimalFormat;
+    private final MessageSelectorPanel messageSelectorPanelButtonsColorFonts;
 
     public CalculatorPreferences(
             CalculatorLogic logic, 
@@ -89,6 +90,12 @@ public class CalculatorPreferences extends JPanel {
                 new String[] {"2", "3", "4"}, 
                 "2"
         );
+        
+        this.messageSelectorPanelButtonsColorFonts = new MessageSelectorPanel(
+                "Kolor czcionki przycisków", 
+                new String[] {"Czarny", "Szary"}, 
+                "Czarny"
+        );
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
         setPreferredSize(new Dimension(250, 700));
@@ -103,11 +110,11 @@ public class CalculatorPreferences extends JPanel {
         add(this.messageSelectorPanelButtonsColor);
         add(this.messageSelectorPanelFullscreen);
         add(this.messageSelectorPanelDecimalFormat);
+        add(this.messageSelectorPanelButtonsColorFonts);
        
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> {
-            System.out.println(this.messageSelectorPanelDecimalFormat.getSelectedMessage());
             this.logic.setDivisionByZeroMessage(
                     this.messageSelectorPanelDivisionByZero
                             .getSelectedMessage()
@@ -182,8 +189,22 @@ public class CalculatorPreferences extends JPanel {
             
             String selectedColor = this.messageSelectorPanelButtonsColor
                     .getSelectedMessage();
+            String selectedFontsColor = this.messageSelectorPanelButtonsColorFonts
+                    .getSelectedMessage();
             Color backgroundColor;
-            Color foregroundColor = Color.WHITE;
+            Color foregroundColor;
+            
+            switch (selectedFontsColor) {
+                case "Szary":
+                    foregroundColor = Color.GRAY;
+                    break;
+                case "Czarny":
+                    foregroundColor = Color.BLACK;
+                    break;
+                default:
+                    foregroundColor = UIManager.getColor("Button.foreground");
+                    break;
+            }
 
             switch (selectedColor) {
                 case "Czarny":
@@ -192,7 +213,6 @@ public class CalculatorPreferences extends JPanel {
                 case "Windows Color":
                 default:
                     backgroundColor = UIManager.getColor("Button.background");
-                    foregroundColor = UIManager.getColor("Button.foreground");
                     break;
             }
             if (this.parentFrame instanceof CalculatorDisplay calculatorDisplay) {
@@ -204,7 +224,8 @@ public class CalculatorPreferences extends JPanel {
                 this.messageSelectorPanelFullscreen.getSelectedMessage()
             );
             
-            String selectedValue = messageSelectorPanelDecimalFormat.getSelectedMessage();
+            String selectedValue = messageSelectorPanelDecimalFormat
+                    .getSelectedMessage();
 
             if (selectedValue == null) {
                 System.err.println("Wybrano wartość null, ignoruję.");
@@ -219,7 +240,6 @@ public class CalculatorPreferences extends JPanel {
                 }
 
                 logic.setDecimalFormat(pattern.toString());
-                System.out.println("Zaktualizowano format na: " + pattern);
             } catch (NumberFormatException ex) {
                 System.err.println("Nieprawidłowa wartość: " + selectedValue);
             }

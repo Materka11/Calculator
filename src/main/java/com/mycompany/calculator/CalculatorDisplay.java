@@ -172,8 +172,10 @@ public class CalculatorDisplay extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            CalculatorDisplay calculator = new CalculatorDisplay();
-            calculator.setVisible(true);
+            CalculatorDisplay calculatorTest = new CalculatorDisplay();
+            Calculator calculatorBase = new Calculator();
+            calculatorTest.setVisible(true);
+            calculatorBase.setVisible(true);
         });
     }
 }
