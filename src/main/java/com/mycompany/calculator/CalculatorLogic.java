@@ -21,9 +21,9 @@ public class CalculatorLogic implements ActionListener {
     private double firstNumber = 0;
     private String operator = "";
     private boolean isNewOperation = true;
-    private String divisionByZeroMessage = "Error! Dzielenie przez zero.";
+    private String divisionByZeroMessage = "Error! Dzielenie przez zero";
     private String unknownOperatorMessage = "Nieznany error z operatorem";
-    private String fullscreenMessage = "Tryb pełnoekranowy włączony.";
+    private String fullscreenMessage = "Tryb pełnoekranowy włączony";
 
     public CalculatorLogic(JTextField display) {
         this.display = display;
@@ -47,6 +47,10 @@ public class CalculatorLogic implements ActionListener {
     
     public void setDecimalFormat(String pattern) {
         this.df.applyPattern(pattern);
+    }
+    
+    public String getDisplayText() {
+        return display.getText();
     }
  
     @Override

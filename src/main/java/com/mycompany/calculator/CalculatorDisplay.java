@@ -172,11 +172,22 @@ public class CalculatorDisplay extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            CalculatorDisplay calculatorTest = new CalculatorDisplay();
-            Calculator calculatorBase = new Calculator();
+            CalculatorDisplay calculatorTest = new CalculatorDisplay(); 
             calculatorTest.setVisible(true);
-            calculatorBase.setVisible(true);
+            
+             Calculator calculatorBase = new Calculator();
+             calculatorBase.setVisible(true);
+
+            JTextField display = new JTextField();
+            CalculatorLogic calculatorLogic = new CalculatorLogic(display);
+
+            CalculatorLogicTest.runTest(calculatorLogic, "5", "+", "3", "8.00", "Dodawanie");
+            CalculatorLogicTest.runTest(calculatorLogic, "10", "-", "7", "3.00", "Odejmowanie");
+            CalculatorLogicTest.runTest(calculatorLogic, "4", "*", "2.5", "10.00", "Mnożenie");
+            CalculatorLogicTest.runTest(calculatorLogic, "8", "/", "2", "4.00", "Dzielenie");
+            CalculatorLogicTest.runTest(calculatorLogic, "8", "/", "0", "Error! Dzielenie przez zero", "Dzielenie przez zero");
         });
     }
+
 }
 

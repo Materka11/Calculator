@@ -38,9 +38,9 @@ public class CalculatorPreferences extends JPanel {
         this.messageSelectorPanelDivisionByZero = new MessageSelectorPanel(
                 "Komunikat przy dzieleniu przez zero:", 
                 new String[]{ 
-                    "Error! Dzielenie przez zero.", 
+                    "Error! Dzielenie przez zero", 
                     "Nie można dzielić przez zero!", 
-                    "Błąd: dzielenie przez zero." 
+                    "Błąd: dzielenie przez zero" 
                 },
                 "Error! Dzielenie przez zero."
         );
@@ -78,11 +78,11 @@ public class CalculatorPreferences extends JPanel {
         this.messageSelectorPanelFullscreen = new MessageSelectorPanel(
             "Komunikat o trybie pełnoekranowym:", 
             new String[]{
-                "Tryb pełnoekranowy włączony.",
+                "Tryb pełnoekranowy włączony",
                 "Pełny ekran aktywowany!",
-                "Tryb pełnoekranowy został uruchomiony."
+                "Tryb pełnoekranowy został uruchomiony"
             },
-            "Tryb pełnoekranowy włączony."
+            "Tryb pełnoekranowy włączony"
         );
         
         this.messageSelectorPanelDecimalFormat = new MessageSelectorPanel(
@@ -228,7 +228,7 @@ public class CalculatorPreferences extends JPanel {
                     .getSelectedMessage();
 
             if (selectedValue == null) {
-                System.err.println("Wybrano wartość null, ignoruję.");
+                System.err.println("Wybrano wartość null, ignoruję");
                 return;
             }
 
