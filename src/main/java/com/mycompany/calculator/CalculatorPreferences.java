@@ -38,9 +38,9 @@ public class CalculatorPreferences extends JPanel {
         this.messageSelectorPanelDivisionByZero = new MessageSelectorPanel(
                 "Komunikat przy dzieleniu przez zero:", 
                 new String[]{ 
-                    "Error! Dzielenie przez zero.", 
+                    "Error! Dzielenie przez zero", 
                     "Nie można dzielić przez zero!", 
-                    "Błąd: dzielenie przez zero." 
+                    "Błąd: dzielenie przez zero" 
                 },
                 "Error! Dzielenie przez zero."
         );
@@ -78,11 +78,11 @@ public class CalculatorPreferences extends JPanel {
         this.messageSelectorPanelFullscreen = new MessageSelectorPanel(
             "Komunikat o trybie pełnoekranowym:", 
             new String[]{
-                "Tryb pełnoekranowy włączony.",
+                "Tryb pełnoekranowy włączony",
                 "Pełny ekran aktywowany!",
-                "Tryb pełnoekranowy został uruchomiony."
+                "Tryb pełnoekranowy został uruchomiony"
             },
-            "Tryb pełnoekranowy włączony."
+            "Tryb pełnoekranowy włączony"
         );
         
         this.messageSelectorPanelDecimalFormat = new MessageSelectorPanel(
@@ -228,7 +228,7 @@ public class CalculatorPreferences extends JPanel {
                     .getSelectedMessage();
 
             if (selectedValue == null) {
-                System.err.println("Wybrano wartość null, ignoruję.");
+                System.err.println("Wybrano wartość null, ignoruję");
                 return;
             }
 
@@ -265,6 +265,24 @@ public class CalculatorPreferences extends JPanel {
             this.parentFrame.repaint();
         });
         add(saveButton);
+        
+        JButton randomButton = new JButton("Random");
+        randomButton.addActionListener(e -> {
+            this.messageSelectorPanelDivisionByZero.selectRandomMessage();
+            this.messageSelectorPanelFonts.selectRandomMessage();
+            this.messageSelectorPanelSize.selectRandomMessage();
+            this.messageSelectorPanelOperator.selectRandomMessage();
+            this.messageSelectorPanelGrid.selectRandomMessage();
+            this.messageSelectorPanelFontsStyle.selectRandomMessage();
+            this.messageSelectorPanelButtonsColor.selectRandomMessage();
+            this.messageSelectorPanelFullscreen.selectRandomMessage();
+            this.messageSelectorPanelDecimalFormat.selectRandomMessage();
+            this.messageSelectorPanelButtonsColorFonts.selectRandomMessage();
+
+            revalidate();
+            repaint();
+        });
+        add(randomButton);
     }
     
     public void setPreferencesScrollPane(JScrollPane scrollPane) {
