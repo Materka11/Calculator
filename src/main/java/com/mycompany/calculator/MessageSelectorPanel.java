@@ -53,5 +53,13 @@ public class MessageSelectorPanel extends JPanel {
         revalidate();
         repaint();
     }
+    
+    public void selectRandomMessage() {
+        int itemCount = messageSelector.getItemCount();
+        if (itemCount > 0) {
+            int randomIndex = (int) (Math.random() * itemCount);
+            messageSelector.setSelectedIndex(randomIndex);
+    }
+}
 }
 

@@ -265,6 +265,24 @@ public class CalculatorPreferences extends JPanel {
             this.parentFrame.repaint();
         });
         add(saveButton);
+        
+        JButton randomButton = new JButton("Random");
+        randomButton.addActionListener(e -> {
+            this.messageSelectorPanelDivisionByZero.selectRandomMessage();
+            this.messageSelectorPanelFonts.selectRandomMessage();
+            this.messageSelectorPanelSize.selectRandomMessage();
+            this.messageSelectorPanelOperator.selectRandomMessage();
+            this.messageSelectorPanelGrid.selectRandomMessage();
+            this.messageSelectorPanelFontsStyle.selectRandomMessage();
+            this.messageSelectorPanelButtonsColor.selectRandomMessage();
+            this.messageSelectorPanelFullscreen.selectRandomMessage();
+            this.messageSelectorPanelDecimalFormat.selectRandomMessage();
+            this.messageSelectorPanelButtonsColorFonts.selectRandomMessage();
+
+            revalidate();
+            repaint();
+        });
+        add(randomButton);
     }
     
     public void setPreferencesScrollPane(JScrollPane scrollPane) {
